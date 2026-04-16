@@ -1,27 +1,38 @@
 import { useState, useEffect } from "react"
 
+import HabitForm from "./components/HabitForm"
+import HabitList from "./components/HabitList"
+import ProgressBar from "./components/ProgressBar"
+
 function App() {
 
-  const [habits, setHabits] = useState(() => {
-    const saved = localStorage.getItem("habits")
+  const [habits, setHabits] =
+    useState(() => {
 
-    if (saved) {
-      return JSON.parse(saved)
-    }
+      const saved =
+        localStorage.getItem("habits")
 
-    return []
-  })
+      return saved
+        ? JSON.parse(saved)
+        : []
 
+    })
+  
+  const [newHabit, setNewHabit] =
+    useState("")
+  
   useEffect(() => {
     localStorage.setItem(
       "habits",
       JSON.stringify(habits)
     )
+
   }, [habits])
-  const [newHabit, setNewHabit] = useState("")
 
   function addHabit() {
-    if (newHabit.trim() === "") return
+
+    if (newHabit.trim() === "")
+      return
 
     const habit = {
       id: Date.now(),
@@ -30,81 +41,62 @@ function App() {
     }
 
     setHabits([...habits, habit])
-    setNewHabit("")
 
+    setNewHabit("")
   }
 
   function toggleHabit(id) {
-    const updatedHabits = habits.map((habit) => {
-      if (habit.id === id) {
-        return {
-          ...habit,
-          done: !habit.done
-        }
-      }
 
-      return habit
+    const updated =
+      habits.map((habit) => 
+        habit.id === id
+          ? {
+              ...habit,
+              done: !habit.done
+            }
+          : habit
+      )
 
-    })
+    setHabits(updated)
 
-    setHabits(updatedHabits)
   }
 
   function deleteHabit(id) {
 
-    const filteredHabits = habits.filter(
-      (habit) => habit.id !== id
+    setHabits(
+      habits.filter(
+        (habit) =>
+          habit.id !== id
+      )
     )
 
-    setHabits(filteredHabits)
   }
 
   return (
-    <div>
-      <h1>Habit Tracker</h1>
+    
+    <div className="min-h-screen bg-purple-50 flex justify-center items-center p-6">
+      <div className="w-full max-w-xl bg-white p-8 rounded-3x1 shadow-lg">
+        <h1 className="text-3x1 font-bold mb-6 text-center text-purple-600">
+          Habit Tracker
+        </h1>
 
-      <input 
-        type="text"
-        placeholder="Novo hábito..."
-        value={newHabit}
-        onChange={(e) => setNewHabit(e.target.value)}
-      />
+        <ProgressBar habits={habits} />
 
-      <button onClick={addHabit}>
-        Adicionar
-      </button>
+        <HabitForm
+          newHabit={newHabit}
+          setNewHabit={setNewHabit}
+          addHabit={addHabit}
+        />
 
+        <HabitList
+          habits={habits}
+          toggleHabit={toggleHabit}
+          deleteHabit={deleteHabit}
+        />
 
-      <ul>
-        {habits.map((habit) => (
-
-          <li key={habit.id}>
-            <input 
-              type="checkbox"
-              checked={habit.done}
-              onChange={() => toggleHabit(habit.id)}
-            />
-
-            <span
-              style={{
-                textDecoration: habit.done ? "line-through" : "none"
-              }}
-            >
-              {habit.name}
-            </span>     
-
-            <button
-              onClick={() => deleteHabit(habit.id)}
-            >
-              Remover
-            </button>  
-
-          </li>
-        ))}
-
-      </ul>
-
+      </div>
     </div>
+
   )
 }
 
