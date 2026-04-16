@@ -16,7 +16,7 @@ function ProgressBar({ habits }) {
     return (
 
         <div className="mb-6">
-            <div className="flex justify-between mb-2 text-sm text-gray-600">
+            <div className="flex justify-between mb-2 text-sm text-gray-600 dark:text-gray-400">
                 <span>
                     {completed} de {total} hábitos concluídos
                 </span>

@@ -29,7 +29,6 @@ function HabitList({
                 />
 
             ))}
-
         </ul>
     )
 }
