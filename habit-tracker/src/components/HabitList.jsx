@@ -3,7 +3,8 @@ import HabitItem from "./HabitItem";
 function HabitList({
     habits,
     toggleHabit,
-    deleteHabit
+    deleteHabit,
+    editHabit
 }) {
 
     if (habits.length === 0) {
@@ -24,6 +25,7 @@ function HabitList({
                     habit={habit}
                     toggleHabit={toggleHabit}
                     deleteHabit={deleteHabit}
+                    editHabit={editHabit}
                 />
 
             ))}
